@@ -117,28 +117,3 @@ knn_pred = knn.predict(X_test)
 knn_accuracy = np.mean(cross_val_score(knn, X_test, y_test, cv=20, scoring="accuracy"))
 knn_f1 = np.mean(cross_val_score(knn, X_test, y_test, cv=20, scoring="f1"))
 
-final_test = pd.read_csv("Ecoli_test.csv")
-
-f_t = final_test.iloc[:, 0:103]
-f_tscalar = scalar.fit(f_t.iloc[:, 0:103])
-f_t1 = scalar.transform(f_t)
-f_t1 = pd.DataFrame(f_t1)
-
-f_t1["Nom (Col 104)"] = list(final_test.iloc[:, 103])
-f_t1["Nom (Col 105)"] = list(final_test.iloc[:, 104])
-f_t1["Nom (Col 106)"] = list(final_test.iloc[:, 105])
-
-final_test = f_t1
-
-
-final_test = handle_outliers(final_test)
-final_test.columns = final_test.columns.astype(str)
-
-knn_final = knn.predict(final_test)
-knn_final = pd.DataFrame(knn_final).astype(int)
-
-Accuracy_F1 = pd.DataFrame([[round(knn_accuracy, 3), round(knn_f1, 3)]])
-
-knn_final["new"] = pd.Series(dtype="int")
-knn_final.to_csv("s4736164.csv", header=False, index=False)
-Accuracy_F1.to_csv("s4736164.csv", mode="a", header=False, index=False)
